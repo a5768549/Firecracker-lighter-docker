@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  php:
+    container_name: apache_php
+    build: ./php
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+    volumes:
+      - ./www:/var/www/html
+  mysql:
+    container_name: mysql
+    build: ./mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/sql/mysql.cnf:/etc/mysql/conf.d/custom.cnf
+    environment:
+      - MYSQL_DATABASE=firecracker
+      - MYSQL_ROOT_PASSWORD=Aa970236
+      - MYSQL_USER=a5768549
+      - MYSQL_PASSWORD=Aa970236
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
